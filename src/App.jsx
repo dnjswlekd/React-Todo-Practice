@@ -1,26 +1,21 @@
 import { useEffect, useState } from 'react';
-
+import TodoForm from './components/TodoForm';
 import './App.css';
+import TodoItem from './components/TodoItem';
 
 function App() {
   const [todo, setTodo] = useState([]); // 배열
-  const [newTodo, setNewTodo] = useState(''); //문자열
-
-  const onChangeNewTodo = (e) => {
-    setNewTodo(e.target.value);
-  };
 
   // form은 원래 제출하고나면 다른페이지로 이동 그현상을 막기위해 preventDefault 필수 => react는 SPA 때문에 새로고침 없어야함!
-  const onSubmit = (e) => {
-    e.preventDefault();
-
-    // push 절대 안됨 왜냐 react는 새로 담아줘야하기때문 ex todo === todo가 true이면 변경사항을 파악을 못함
-    // todo.push({
-    //   title: newTodo,
-    //   completed: false,
-    //   id: Math.random(),
-    // });
-    // 꼭 새로 담아줘야함
+  // push 절대 안됨 왜냐 react는 새로 담아줘야하기때문 ex todo === todo가 true이면 변경사항을 파악을 못함
+  // todo.push({
+  //   title: newTodo,
+  //   completed: false,
+  //   id: Math.random(),
+  // });
+  // 꼭 새로 담아줘야함
+  const onSubmit = (newTodo) => {
+    console.log('onParentSubmit');
     const nextTodo = [
       ...todo,
       {
@@ -46,21 +41,14 @@ function App() {
         {todo.length === 0 ? (
           <div>
             <h1>할 일을 추가해보세요.</h1>
-            <form onSubmit={onSubmit}>
-              {/* input에서 enter하면 바로 추가될 수 있게 onsubmit */}
-              <input type="text" value={newTodo} onChange={onChangeNewTodo} />
-              <button>추가</button>
-            </form>
+            <TodoForm onSubmit={onSubmit} />
           </div>
         ) : (
           <>
-            {todo.map((t, id) => (
-              <div key={id}>{t.title}</div>
+            {todo.map((t, i) => (
+              <TodoItem key={t.id} item={t} index={i} setTodo={setTodo} />
             ))}
-            <form onSubmit={onSubmit}>
-              <input type="text" value={newTodo} onChange={onChangeNewTodo} />
-              <button>추가</button>
-            </form>{' '}
+            <TodoForm onSubmit={onSubmit} />
           </>
         )}
       </div>
